@@ -5,215 +5,68 @@
     <meta charset="UTF-8">
     <title>Web Piano</title>
     <script src='https://unpkg.com/tone@latest/build/Tone.js'></script>
-
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@700&display=swap');
-
-        body {
-            font-family: 'Nunito', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 80vh;
-            flex-direction: column;
-        }
-
-        ul {
-            list-style: none;
-            display: flex;
-            padding: 0;
-        }
-
-        ul .key {
-            position: relative;
-            width: 60px;
-            height: 180px;
-            border: 1px solid black;
-            border-right: none;
-            background: #fffff0;
-            border-radius: 5px;
-            box-shadow: 0px 3px 5px #666;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            padding-bottom: 10px;
-            font-weight: bold;
-        }
-
-        ul .key:last-child {
-            border-right: 1px solid black;
-        }
-
-        ul .black-key {
-            position: absolute;
-            top: -1px;
-            left: 37.5px;
-            width: 45px;
-            height: 120px;
-            background: black;
-            border-radius: 5px;
-            box-shadow: 0px 3px 5px #666;
-            z-index: 999;
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            padding-bottom: 10px;
-            color: white;
-        }
-
-        ul .active {
-            box-shadow: 0px 1px 3px #666;
-        }
-    </style>
+    <link rel="stylesheet" href="style2.css">
 </head>
 
 <body>
-    <h1>AIST2010 Project</h1>
     <h2>Use (↑ ↓) and (← →) to change volume and oscillator type.</h2>
     <h3>Current type: <span id="type"></span> <br> Current vol: <span id="vol"></span></h3>
 
     <ul id="piano">
-        <li id="d" data-note="C4" class="key">
-            <div id="r" data-note="C#4" class="black-key">R</div>
+        <li id="a" data-note="C4" class="key">
+            <div id="w" data-note="C#4" class="black-key">W</div>
+            A
+        </li>
+        <li id="s" data-note="D4" class="key">
+            <div id="e" data-note="D#4" class="black-key">E</div>
+            S
+        </li>
+        <li id="d" data-note="E4" class="key">
             D
         </li>
-        <li id="f" data-note="D4" class="key">
-            <div id="t" data-note="D#4" class="black-key">T</div>
+        <li id="f" data-note="F4" class="key">
+            <div id="t" data-note="F#4" class="black-key">T</div>
             F
         </li>
-        <li id="g" data-note="E4" class="key">
+        <li id="g" data-note="G4" class="key">
+            <div id="y" data-note="G#4" class="black-key">Y</div>
             G
         </li>
-        <li id="h" data-note="F4" class="key">
-            <div id="u" data-note="F#4" class="black-key">U</div>
+        <li id="h" data-note="A4" class="key">
+            <div id="u" data-note="A#4" class="black-key">U</div>
             H
         </li>
-        <li id="j" data-note="G4" class="key">
-            <div id="i" data-note="G#4" class="black-key">I</div>
+        <li id="j" data-note="B4" class="key">
             J
         </li>
-        <li id="k" data-note="A4" class="key">
-            <div id="o" data-note="A#4" class="black-key">O</div>
+        <li id="k" data-note="C5" class="key">
+            <div id="o" data-note="C#5" class="black-key">O</div>
             K
         </li>
-        <li id="l" data-note="B4" class="key">
+        <li id="l" data-note="D5" class="key">
+            <div id="p" data-note="D#5" class="black-key">P</div>
             L
         </li>
-        <li id=";" data-note="C5" class="key">
+        <li id=";" data-note="E5" class="key">
             ;
         </li>
+        <li id="" data-note="F5" class="key">
+            <div id="" data-note="F#5" class="black-key"></div>
+        </li>
+        <li id="" data-note="G5" class="key">
+            <div id="" data-note="G#5" class="black-key"></div>
+        </li>
+        <li id="" data-note="A5" class="key">
+            <div id="" data-note="A#5" class="black-key"></div>
+        </li>
+        <li id="" data-note="B5" class="key">
+        </li>
+        <li id="" data-note="C6" class="key">
+        </li>
     </ul>
-    <p>Use keyboard or click to play!</p>
-    <p>Reference:
-        <a href="https://dev.to/shimphillip/building-a-piano-with-tone-js-5c2f" target="_blank">
-            Building a piano with tone.js! - Phillip Shim
-        </a>
-    </p>
-
-    <script>
-        const synth = new Tone.Synth();
-
-        var type = ["sine", "triangle", "square", "sawtooth"],
-            partial = 0,
-            enablePartial = false,
-            vol = 50;
-
-        function changeType(type, enablePartial = false, partial = "") {
-            if (!enablePartial) partial = "";
-            synth.oscillator.type = type + partial;
-            document.getElementById('type').textContent = synth.oscillator.type.toUpperCase();
-        }
-
-        changeType(type[0], enablePartial, partial);
-        synth.volume.value -= 20;
-        document.getElementById('vol').textContent = vol;
-
-        document.addEventListener('keydown', (e) => {
-            var keyCode = e.which,
-                arrow = { left: 37, up: 38, right: 39, down: 40, space: 32, };
-
-            switch (e.keyCode) {
-                case arrow.up:
-                    if (vol < 100) {
-                        synth.volume.value += 2;
-                        vol += 5;
-                    }
-                    break;
-                case arrow.down:
-                    if (vol > 10) {
-                        synth.volume.value -= 2;
-                        vol -= 5;
-                    }
-                    break;
-                case arrow.left:
-                    type.unshift(type.pop());
-                    break;
-                case arrow.right:
-                    type.push(type.shift());
-                    break;
-                default:
-                    return;
-            }
-            changeType(type[0], enablePartial);
-            document.getElementById('vol').textContent = vol;
-        });
-
-        synth.toDestination();
-
-        // mouse play events
-        var clickedKey;
-
-        document.getElementById('piano').addEventListener('mousedown', (e) => {
-            synth.triggerAttack(e.target.dataset.note);
-            clickedKey = e.target.id;
-            e.target.classList.add('active');
-        });
-        document.addEventListener('mouseup', (e) => {
-            synth.triggerRelease();
-            document.getElementById(clickedKey).classList.remove('active');
-        });
-
-        // keyboard play events
-        var pressingKeys = [],
-            keys = ["d", "f", "g", "h", "j", "k", "l", ";", "r", "t", "u", "i", "o",];
-
-        document.addEventListener('keydown', (e) => {
-            if (keys.includes(e.key)) {
-                synth.triggerAttack(document.getElementById(e.key).dataset.note);
-                pressingKeys.push(e.key);
-                document.getElementById(e.key).classList.add('active');
-            }
-        });
-        document.addEventListener('keyup', (e) => {
-            if (keys.includes(e.key)) {
-                if (pressingKeys.includes(e.key)) synth.triggerRelease();
-                pressingKeys = pressingKeys.filter(item => item !== e.key);
-                document.getElementById(e.key).classList.remove('active');
-            }
-        });
-
-        // lab requirement: use z x c v to tune the oscillations
-        // here changes the oscillations' partial count
-        // intentionally hidden from user
-        document.addEventListener("keydown", e => {
-            switch (e.key) {
-                case "z":
-                    changeType(type[0], true, 4);
-                    return;
-                case "x":
-                    changeType(type[0], true, 8);
-                    return;
-                case "c":
-                    changeType(type[0], true, 16);
-                    return;
-                case "v":
-                    changeType(type[0], true, 32);
-                    return;
-            }
-        });
-    </script>
 
 </body>
+
+<script src='./piano.js'></script>
 
 </html>

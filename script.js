@@ -100,7 +100,7 @@ melodySelectors.forEach(function (selector, index) {
 melodySelectors[1].children[1].selected = 'selected';
 
 function onSelectorInput(event) {
-	updateSelector(event.target, true);
+	updateSelector(event.target, true, false);
 }
 
 function updateSelector(selector, shouldInterpolate, userDidInput) {
@@ -195,7 +195,7 @@ var sequences = {
 
 function setup() {
 	melodySelectors.forEach(function (selector) {
-		updateSelector(selector, false);
+		updateSelector(selector, false, false);
 	});
 	windowResized();
 	noStroke();
@@ -277,7 +277,7 @@ function mousePressed() {
 
 function setSelectorToLast(selector, i) {
 	selector.value = selector.options[selector.length - 1].value;
-	updateSelector(selector, true);
+	updateSelector(selector, true, false);
 }
 
 function keyPressed() {

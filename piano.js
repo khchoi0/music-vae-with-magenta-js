@@ -58,20 +58,30 @@ document.addEventListener('keydown', (e) => {
 
 synth.toDestination();
 
+var userInNoteSequence = [60, 60, 67, 67, 69, 69, 67, 67, 65, 65, 64, 64, 62, 62, 60,];
+
 // mouse play events
 var clickedKey;
 
 document.getElementById('piano').addEventListener('mousedown', (e) => {
-	synth.triggerAttack(e.target.dataset.note);
-	clickedKey = e.target.id;
 	e.target.classList.add('active');
+	clickedKey = e.target.id;
+
+	synth.triggerAttack(e.target.dataset.note);
+
+    userInNoteSequence.pop();
+    userInNoteSequence.unshift(toMidi(e.target.dataset.note));
+
+    var melodySelectors = document.querySelectorAll('.drop-down');
+    var selector1 = melodySelectors[0];
+    updateSelector(selector1, true, true);
+    selector1.value = "User Input";
 });
-document.addEventListener('mouseup', (e) => {
+document.addEventListener('mouseup', async (e) => {
 	synth.triggerRelease();
+    // await new Promise(r => setTimeout(r, 100));
 	document.getElementById(clickedKey).classList.remove('active');
 });
-
-var userInNoteSequence = [32, 64, 32, 64, 32, 64, 32, 64, 32, 64, 32, 64, 32, 64, 32, 64];
 
 // keyboard play events
 var pressingKeys = [],
@@ -79,23 +89,25 @@ var pressingKeys = [],
 
 document.addEventListener('keydown', (e) => {
 	if (keys.includes(e.key)) {
+		document.getElementById(e.key).classList.add('active');
+		pressingKeys.push(e.key);
+
 		synth.triggerAttack(document.getElementById(e.key).dataset.note);
 
         userInNoteSequence.pop();
         userInNoteSequence.unshift(toMidi(document.getElementById(e.key).dataset.note));
 
-        melodySelectors.forEach(function(selector){
-            updateSelector(selector, true, true);
-        });
-
-		pressingKeys.push(e.key);
-		document.getElementById(e.key).classList.add('active');
+        var melodySelectors = document.querySelectorAll('.drop-down');
+        var selector1 = melodySelectors[0];
+        updateSelector(selector1, true, true);
+        selector1.value = "User Input";
 	}
 });
-document.addEventListener('keyup', (e) => {
+document.addEventListener('keyup', async (e) => {
 	if (keys.includes(e.key)) {
 		if (pressingKeys.includes(e.key)) synth.triggerRelease();
 		pressingKeys = pressingKeys.filter((item) => item !== e.key);
+        // await new Promise(r => setTimeout(r, 100));
 		document.getElementById(e.key).classList.remove('active');
 	}
 });

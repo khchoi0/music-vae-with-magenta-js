@@ -45,10 +45,10 @@ body {
 }
 
 .piano-container {
-    padding-top: 5vh;
+    padding-top: 10vh;
     display: flex;
     align-items: center;
-    min-height: 80vh;
+    min-height: 50vh;
     flex-direction: column;
 }
 
@@ -182,6 +182,10 @@ h1 {
     text-transform: uppercase;
     margin-top: 40px;
     margin-bottom: 0;
+}
+
+h2 {
+    color: #fff;
 }
 
 a,
@@ -513,7 +517,7 @@ ul .key {
     border-right: none;
     background: #fffff0;
     border-radius: 5px;
-    box-shadow: 0px 3px 5px #666;
+    box-shadow: 0px 9px 15px #666;
     cursor: pointer;
     display: flex;
     justify-content: center;
@@ -545,5 +549,5 @@ ul .black-key {
 }
 
 ul .active {
-    box-shadow: 0px 1px 3px #666;
+    box-shadow: 0px 3px 9px #666;
 }

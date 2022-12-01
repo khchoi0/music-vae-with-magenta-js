@@ -72,10 +72,12 @@ document.getElementById('piano').addEventListener('mousedown', (e) => {
     userInNoteSequence.shift();
     userInNoteSequence.push(toMidi(e.target.dataset.note));
 
+    document.activeElement.blur();
+
     var melodySelectors = document.querySelectorAll('.drop-down');
     var selector1 = melodySelectors[0];
     updateSelector(selector1, true, true);
-    selector1.value = "User Input";
+    selector1.value = "Customize";
 });
 document.addEventListener('mouseup', async (e) => {
 	synth.triggerRelease();
@@ -97,10 +99,12 @@ document.addEventListener('keydown', (e) => {
         userInNoteSequence.shift();
         userInNoteSequence.push(toMidi(document.getElementById(e.key).dataset.note));
 
+        document.activeElement.blur();
+
         var melodySelectors = document.querySelectorAll('.drop-down');
         var selector1 = melodySelectors[0];
         updateSelector(selector1, true, true);
-        selector1.value = "User Input";
+        selector1.value = "Customize";
 	}
 });
 document.addEventListener('keyup', async (e) => {

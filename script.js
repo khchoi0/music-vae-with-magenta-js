@@ -86,7 +86,7 @@ if (isSupported) {
 //Drop Down Presets Setup
 var melodySelectors = document.querySelectorAll('.drop-down');
 var options = Object.keys(presetMelodies)
-	.concat(['Generated'])
+	.concat(['Generated', 'Customize'])
 	.map(function (presetName) {
 		return '<option>' + presetName + '</option>';
 	})

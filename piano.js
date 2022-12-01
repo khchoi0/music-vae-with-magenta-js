@@ -28,7 +28,9 @@ synth.volume.value -= 20;
 
 document.addEventListener('keydown', (e) => {
 	var keyCode = e.code,
-		arrow = { left: 37, up: 38, right: 39, down: 40, space: 32 };
+		arrow = { ArrowLeft: 37, ArrowUp: 38, ArrowRight: 39, ArrowDown: 40, Space: 32 };
+
+    console.log(keyCode);
 
 	switch (keyCode) {
 		case arrow.up:
@@ -69,8 +71,8 @@ document.getElementById('piano').addEventListener('mousedown', (e) => {
 
 	synth.triggerAttack(e.target.dataset.note);
 
-    userInNoteSequence.pop();
-    userInNoteSequence.unshift(toMidi(e.target.dataset.note));
+    userInNoteSequence.shift();
+    userInNoteSequence.push(toMidi(e.target.dataset.note));
 
     var melodySelectors = document.querySelectorAll('.drop-down');
     var selector1 = melodySelectors[0];
@@ -94,8 +96,8 @@ document.addEventListener('keydown', (e) => {
 
 		synth.triggerAttack(document.getElementById(e.key).dataset.note);
 
-        userInNoteSequence.pop();
-        userInNoteSequence.unshift(toMidi(document.getElementById(e.key).dataset.note));
+        userInNoteSequence.shift();
+        userInNoteSequence.push(toMidi(document.getElementById(e.key).dataset.note));
 
         var melodySelectors = document.querySelectorAll('.drop-down');
         var selector1 = melodySelectors[0];

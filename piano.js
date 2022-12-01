@@ -30,8 +30,6 @@ document.addEventListener('keydown', (e) => {
 	var keyCode = e.code,
 		arrow = { ArrowLeft: 37, ArrowUp: 38, ArrowRight: 39, ArrowDown: 40, Space: 32 };
 
-    console.log(keyCode);
-
 	switch (keyCode) {
 		case arrow.up:
 			if (vol < 100) {

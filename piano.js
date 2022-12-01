@@ -28,7 +28,7 @@ synth.volume.value -= 20;
 
 document.addEventListener('keydown', (e) => {
 	var keyCode = e.code,
-		arrow = { ArrowLeft: 37, ArrowUp: 38, ArrowRight: 39, ArrowDown: 40, Space: 32 };
+		arrow = { left: "ArrowLeft", up: "ArrowUp", right: "ArrowRight", down: "ArrowDown", space: "Space" };
 
 	switch (keyCode) {
 		case arrow.up:

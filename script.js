@@ -107,18 +107,18 @@ function updateSelector(selector, shouldInterpolate, userDidInput) {
 	var preset = presetMelodies[selector.value];
 	var selectedColor;
 	if (selector === melodySelectors[0]) {
-		MELODY1 = preset || musicVAE.sample(1)[0];
-
 		if (userDidInput) {
 			var noteSeq = userInNoteSequence.map(function (x, i) {
 				return { pitch: x, quantizedStartStep: i * 2, quantizedEndStep: (i + 1) * 2 };
 			});
 			var noteSeqJson = {
 				notes: noteSeq,
-				color: [113, 20, 221],
+				color: [30, 144, 255],
 			};
-			MELODY1 = noteSeqJson;
+			preset = noteSeqJson;
 		}
+
+		MELODY1 = preset || musicVAE.sample(1)[0];
 
 		selectedColor = preset ? preset.color : getGeneratedMelodyColor(0);
 		sequences.colorA = color(selectedColor);
@@ -143,19 +143,33 @@ function interpolateMelodies() {
 
 ///////////////////////////////
 //TONE.js setup for audio play back
-var samplesPath = './data/piano/';
-// var samplesPath = "https://storage.googleapis.com/melody-mixer/piano/"
+var samplesPath, pianoSamples;
 var samples = {};
 var NUM_NOTES = 88;
 var MIDI_START_NOTE = 21;
-for (var i = MIDI_START_NOTE; i < NUM_NOTES + MIDI_START_NOTE; i++) {
-	samples[i] = samplesPath + i + '.mp3';
-}
+async function setupToneJs() {
 
-var pianoSamples = new Tone.ToneAudioBuffers(samples, function onPlayersLoaded() {
-	console.log('Tone.js players loaded');
-	// Tone.startMobile();
-});
+    samplesPath = 'https://storage.googleapis.com/melody-mixer/piano/';
+	await fetch('./data/piano/108.mp3').then(function (response) {
+		if (response.status === 200) {
+            samplesPath = './data/piano/'
+		} else {
+            throw new Error("fail to get stored MP3 files");
+        }
+	}).catch(function(err){
+        console.log(err);
+    }).finally(function() {
+        console.log("Fetching MP3 files from: " + samplesPath);
+    });
+
+	for (var i = MIDI_START_NOTE; i < NUM_NOTES + MIDI_START_NOTE; i++) {
+		samples[i] = samplesPath + i + '.mp3';
+	}
+	pianoSamples = new Tone.ToneAudioBuffers(samples, function onPlayersLoaded() {
+		console.log('Tone.js players loaded');
+	});
+}
+setupToneJs();
 
 function playNote(midiNote, numNoteHolds) {
 	var duration = Tone.Transport.toSeconds('8n') * (numNoteHolds || 1);
@@ -482,6 +496,7 @@ playPauseButton.addEventListener('click', togglePlayback);
 
 Tone.Transport.on('start', function () {
 	playPauseButton.classList.add('active');
-}).on('pause', function () {
+});
+Tone.Transport.on('pause', function () {
 	playPauseButton.classList.remove('active');
 });

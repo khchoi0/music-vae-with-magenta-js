@@ -81,8 +81,10 @@ document.getElementById('piano').addEventListener('mousedown', (e) => {
 });
 document.addEventListener('mouseup', async (e) => {
 	synth.triggerRelease();
-    // await new Promise(r => setTimeout(r, 100));
-	document.getElementById(clickedKey).classList.remove('active');
+    await new Promise(r => setTimeout(r, 100));
+    if(document.getElementById(clickedKey)){
+        document.getElementById(clickedKey).classList.remove('active');
+    }
 });
 
 // keyboard play events
@@ -111,7 +113,7 @@ document.addEventListener('keyup', async (e) => {
 	if (keys.includes(e.key)) {
 		if (pressingKeys.includes(e.key)) synth.triggerRelease();
 		pressingKeys = pressingKeys.filter((item) => item !== e.key);
-        // await new Promise(r => setTimeout(r, 100));
+        await new Promise(r => setTimeout(r, 100));
 		document.getElementById(e.key).classList.remove('active');
 	}
 });
